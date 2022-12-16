@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "LinkNinja"
+  site-url: "https://batmanscode.github.io/LinkNinja"
+  description: "A serverless Telegram bot that replaces twitter links with fxtwitter.com, nitter.net or your own instances of either 🐱‍👤"
+  repo-branch: main
+  repo-url: "https://github.com/batmanscode/LinkNinja"
