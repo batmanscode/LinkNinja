@@ -825,6 +825,17 @@ def admin(message):
 
 # %% ../notebooks/00_link_ninja.ipynb 83
 #|eval: false
+if bot.get_webhook_info().url != f'{os.environ["DOMAIN"]}/{os.environ["BOT_TOKEN"]}':
+    bot.remove_webhook() # remove any existing webhooks
+
+    # create new webhook
+    bot.set_webhook(
+        url=f'{os.environ["DOMAIN"]}/{os.environ["BOT_TOKEN"]}',
+        secret_token=os.environ["WEBHOOK_PASSWORD"],
+        drop_pending_updates=True
+    )
+    
+
 # https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/webhook_examples/webhook_fastapi_echo_bot.py
 app = fastapi.FastAPI(docs=None, redoc_url=None)
 
