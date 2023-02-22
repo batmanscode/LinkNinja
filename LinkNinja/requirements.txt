@@ -1,0 +1,9 @@
+pyTelegramBotAPI==4.10.0
+# git+https://github.com/eternnoir/pyTelegramBotAPI.git@ba64180b5f6e2cb8da1a2453f8f9c9505f6281d2#egg=pyTelegramBotAPI
+deta==1.1.0
+validators==0.20.0
+fastapi==0.88.0
+uvicorn==0.20.0
+ulid-py==1.1.0
+pandas==1.5.2
+nest_asyncio==1.5.6
