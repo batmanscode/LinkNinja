@@ -5,6 +5,7 @@ micros:
       src: ./LinkNinja
       engine: python3.9
       primary: true
+      run: uvicorn main:app --port 8080 --host 0.0.0.0
       public_routes:
       - '/*'
       presets:
