@@ -837,6 +837,8 @@ if bot.get_webhook_info().url != f'{os.environ["DOMAIN"]}/{os.environ["BOT_TOKEN
     
 
 # https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/webhook_examples/webhook_fastapi_echo_bot.py
+import fastapi
+
 app = fastapi.FastAPI(docs=None, redoc_url=None)
 
 # %% ../notebooks/00_link_ninja.ipynb 85
