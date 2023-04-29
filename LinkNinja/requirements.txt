@@ -1,0 +1,5 @@
+# http://stackoverflow.com/questions/17803829/ddg#20720019
+# Deta needs a requirements file in the same folder as the micro
+# this file will use the requirements.txt from root
+
+-r requirements.txt
