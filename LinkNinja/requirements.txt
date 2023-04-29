@@ -2,4 +2,16 @@
 # Deta needs a requirements file in the same folder as the micro
 # this file will use the requirements.txt from root
 
--r ./requirements.txt
+# -r ./requirements.txt
+# apparently Deta can't work like this
+
+# pasting the full requirements instead
+
+git+https://github.com/eternnoir/pyTelegramBotAPI.git
+deta==1.1.0
+validators==0.20.0
+fastapi==0.88.0
+uvicorn==0.20.0
+ulid-py==1.1.0
+pandas==1.5.2
+nest_asyncio==1.5.6
