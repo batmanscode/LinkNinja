@@ -2,4 +2,4 @@
 # Deta needs a requirements file in the same folder as the micro
 # this file will use the requirements.txt from root
 
--r requirements.txt
+-r ./requirements.txt
