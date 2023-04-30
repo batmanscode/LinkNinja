@@ -18,6 +18,7 @@ from telebot import apihelper
 import validators
 import ulid
 import nest_asyncio
+import fastapi
 
 # %% ../notebooks/00_link_ninja.ipynb 8
 #|eval: false
@@ -823,6 +824,35 @@ def admin(message):
 
     bot.reply_to(message, text, parse_mode="HTML")
 
+# %% ../notebooks/00_link_ninja.ipynb 81
+#|eval: false
+# check if a webhook already exists
+# if bot.get_webhook_info().url != f'{os.environ["DOMAIN"]}/{os.environ["BOT_TOKEN"]}':
+
+#     # jupyter already runs in a loop so this is needed to work in a notebook
+#     nest_asyncio.apply()
+
+#     # https://pytba.readthedocs.io/en/latest/sync_version/index.html#telebot.TeleBot.set_webhook
+#     bot.run_webhooks(
+#         webhook_url=f'{os.environ["DOMAIN"]}/{os.environ["BOT_TOKEN"]}', # https://yourdomain.tld/bot_token
+#         secret_token=os.environ["WEBHOOK_PASSWORD"], # remove if you don't want to set one
+#         drop_pending_updates=True
+#     )
+    
+# else: # create webhook
+#     bot.remove_webhook() # remove any existing webhooks
+
+#     # create new webhook
+#     bot.set_webhook(
+#         url=f'{os.environ["DOMAIN"]}/{os.environ["BOT_TOKEN"]}',
+#     )
+    
+#     bot.run_webhooks(
+#         webhook_url=f'{os.environ["DOMAIN"]}/{os.environ["BOT_TOKEN"]}', # https://yourdomain.tld/bot_token
+#         secret_token=os.environ["WEBHOOK_PASSWORD"], # remove if you don't want to set one
+#         drop_pending_updates=True
+#     )
+
 # %% ../notebooks/00_link_ninja.ipynb 83
 #|eval: false
 if bot.get_webhook_info().url != f'{os.environ["DOMAIN"]}/{os.environ["BOT_TOKEN"]}':
@@ -837,8 +867,6 @@ if bot.get_webhook_info().url != f'{os.environ["DOMAIN"]}/{os.environ["BOT_TOKEN
     
 
 # https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/webhook_examples/webhook_fastapi_echo_bot.py
-import fastapi
-
 app = fastapi.FastAPI(docs=None, redoc_url=None)
 
 # %% ../notebooks/00_link_ninja.ipynb 85
