@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="A serverless Telegram bot that replaces twitter links with fxtwitter.com, nitter.net or your own instances of either 🐱‍👤">
+
+<title>LinkNinja - Link Ninja</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="LinkNinja - Link Ninja">
+<meta property="og:description" content="A serverless Telegram bot that replaces twitter links with fxtwitter.com, nitter.net or your own instances of either 🐱‍👤">
+<meta property="og:image" content="https://batmanscode.github.io/LinkNinja/images/regex.png">
+<meta property="og:site-name" content="LinkNinja">
+<meta property="og:image:height" content="438">
+<meta property="og:image:width" content="988">
+<meta name="twitter:title" content="LinkNinja - Link Ninja">
+<meta name="twitter:description" content="A serverless Telegram bot that replaces twitter links with fxtwitter.com, nitter.net or your own instances of either 🐱‍👤">
+<meta name="twitter:image" content="https://batmanscode.github.io/LinkNinja/images/regex.png">
+<meta name="twitter:image-height" content="438">
+<meta name="twitter:image-width" content="988">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">LinkNinja</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./link_ninja.html">Link Ninja</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LinkNinja - WIP</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./link_ninja.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Link Ninja</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#database" id="toc-database" class="nav-link active" data-scroll-target="#database">Database</a>
+  <ul class="collapse">
+  <li><a href="#what-data-will-be-stored" id="toc-what-data-will-be-stored" class="nav-link" data-scroll-target="#what-data-will-be-stored">What data will be stored?</a>
+  <ul class="collapse">
+  <li><a href="#get-a-project-key-from-deta" id="toc-get-a-project-key-from-deta" class="nav-link" data-scroll-target="#get-a-project-key-from-deta">Get a Project Key from Deta</a></li>
+  </ul></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
+  <ul class="collapse">
+  <li><a href="#settings" id="toc-settings" class="nav-link" data-scroll-target="#settings">Settings</a></li>
+  <li><a href="#update_setting_signature" id="toc-update_setting_signature" class="nav-link" data-scroll-target="#update_setting_signature">update_setting_signature</a></li>
+  <li><a href="#update_setting_domain" id="toc-update_setting_domain" class="nav-link" data-scroll-target="#update_setting_domain">update_setting_domain</a></li>
+  <li><a href="#default_settings" id="toc-default_settings" class="nav-link" data-scroll-target="#default_settings">default_settings</a></li>
+  <li><a href="#get_settings" id="toc-get_settings" class="nav-link" data-scroll-target="#get_settings">get_settings</a></li>
+  <li><a href="#delete_setting" id="toc-delete_setting" class="nav-link" data-scroll-target="#delete_setting">delete_setting</a></li>
+  <li><a href="#general" id="toc-general" class="nav-link" data-scroll-target="#general">General</a></li>
+  <li><a href="#fetch_all" id="toc-fetch_all" class="nav-link" data-scroll-target="#fetch_all">fetch_all</a></li>
+  <li><a href="#database_to_dataframe" id="toc-database_to_dataframe" class="nav-link" data-scroll-target="#database_to_dataframe">database_to_dataframe</a></li>
+  <li><a href="#users" id="toc-users" class="nav-link" data-scroll-target="#users">Users</a></li>
+  <li><a href="#save_user" id="toc-save_user" class="nav-link" data-scroll-target="#save_user">save_user</a></li>
+  <li><a href="#delete_user" id="toc-delete_user" class="nav-link" data-scroll-target="#delete_user">delete_user</a></li>
+  <li><a href="#update_users" id="toc-update_users" class="nav-link" data-scroll-target="#update_users">update_users</a></li>
+  <li><a href="#admins" id="toc-admins" class="nav-link" data-scroll-target="#admins">Admins</a></li>
+  <li><a href="#save_admin" id="toc-save_admin" class="nav-link" data-scroll-target="#save_admin">save_admin</a></li>
+  <li><a href="#delete_admin" id="toc-delete_admin" class="nav-link" data-scroll-target="#delete_admin">delete_admin</a></li>
+  <li><a href="#update_admins" id="toc-update_admins" class="nav-link" data-scroll-target="#update_admins">update_admins</a></li>
+  <li><a href="#messages" id="toc-messages" class="nav-link" data-scroll-target="#messages">Messages</a></li>
+  <li><a href="#update_message_count" id="toc-update_message_count" class="nav-link" data-scroll-target="#update_message_count">update_message_count</a></li>
+  <li><a href="#group" id="toc-group" class="nav-link" data-scroll-target="#group">Group</a></li>
+  <li><a href="#save_group" id="toc-save_group" class="nav-link" data-scroll-target="#save_group">save_group</a></li>
+  <li><a href="#delete_group" id="toc-delete_group" class="nav-link" data-scroll-target="#delete_group">delete_group</a></li>
+  <li><a href="#update_groups" id="toc-update_groups" class="nav-link" data-scroll-target="#update_groups">update_groups</a></li>
+  <li><a href="#statistics" id="toc-statistics" class="nav-link" data-scroll-target="#statistics">Statistics</a></li>
+  <li><a href="#get_message_count" id="toc-get_message_count" class="nav-link" data-scroll-target="#get_message_count">get_message_count</a></li>
+  <li><a href="#all_stats" id="toc-all_stats" class="nav-link" data-scroll-target="#all_stats">all_stats</a></li>
+  <li><a href="#admin_stats" id="toc-admin_stats" class="nav-link" data-scroll-target="#admin_stats">admin_stats</a></li>
+  </ul></li>
+  <li><a href="#the-bot" id="toc-the-bot" class="nav-link" data-scroll-target="#the-bot">The bot</a>
+  <ul class="collapse">
+  <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><code>/start</code></a></li>
+  <li><a href="#send_welcome" id="toc-send_welcome" class="nav-link" data-scroll-target="#send_welcome">send_welcome</a></li>
+  <li><a href="#settings-1" id="toc-settings-1" class="nav-link" data-scroll-target="#settings-1">Settings</a></li>
+  <li><a href="#is_admin" id="toc-is_admin" class="nav-link" data-scroll-target="#is_admin">is_admin</a></li>
+  <li><a href="#signature_setting" id="toc-signature_setting" class="nav-link" data-scroll-target="#signature_setting">signature_setting</a></li>
+  <li><a href="#domain_setting" id="toc-domain_setting" class="nav-link" data-scroll-target="#domain_setting">domain_setting</a></li>
+  <li><a href="#replacing-twitter-links" id="toc-replacing-twitter-links" class="nav-link" data-scroll-target="#replacing-twitter-links">Replacing twitter links</a></li>
+  <li><a href="#replace_link" id="toc-replace_link" class="nav-link" data-scroll-target="#replace_link">replace_link</a></li>
+  <li><a href="#send_new_link" id="toc-send_new_link" class="nav-link" data-scroll-target="#send_new_link">send_new_link</a></li>
+  <li><a href="#bot-added-or-removed" id="toc-bot-added-or-removed" class="nav-link" data-scroll-target="#bot-added-or-removed">Bot added or removed</a></li>
+  <li><a href="#added_or_blocked" id="toc-added_or_blocked" class="nav-link" data-scroll-target="#added_or_blocked">added_or_blocked</a></li>
+  <li><a href="#stats" id="toc-stats" class="nav-link" data-scroll-target="#stats"><code>/stats</code></a></li>
+  <li><a href="#message_count" id="toc-message_count" class="nav-link" data-scroll-target="#message_count">message_count</a></li>
+  <li><a href="#allstats" id="toc-allstats" class="nav-link" data-scroll-target="#allstats"><code>/allstats</code></a></li>
+  <li><a href="#signature_setting-1" id="toc-signature_setting-1" class="nav-link" data-scroll-target="#signature_setting-1">signature_setting</a></li>
+  <li><a href="#admin-commands" id="toc-admin-commands" class="nav-link" data-scroll-target="#admin-commands">Admin commands</a></li>
+  <li><a href="#is_bot_admin" id="toc-is_bot_admin" class="nav-link" data-scroll-target="#is_bot_admin">is_bot_admin</a></li>
+  <li><a href="#admin" id="toc-admin" class="nav-link" data-scroll-target="#admin">admin</a></li>
+  <li><a href="#help" id="toc-help" class="nav-link" data-scroll-target="#help"><code>/help</code></a></li>
+  <li><a href="#admin-1" id="toc-admin-1" class="nav-link" data-scroll-target="#admin-1">admin</a></li>
+  </ul></li>
+  <li><a href="#how-to-rundeploy" id="toc-how-to-rundeploy" class="nav-link" data-scroll-target="#how-to-rundeploy">How to run/deploy?</a>
+  <ul class="collapse">
+  <li><a href="#webhooks" id="toc-webhooks" class="nav-link" data-scroll-target="#webhooks">Webhooks</a></li>
+  <li><a href="#polling" id="toc-polling" class="nav-link" data-scroll-target="#polling">Polling</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/batmanscode/LinkNinja/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Link Ninja</h1>
+</div>
+
+<div>
+  <div class="description">
+    <strong>A serverless Telegram bot that replaces twitter links with fxtwitter.com, nitter.net or your own instances of either 🐱‍👤</strong>
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>This has two components: the bot itself, and a database. I’ll start with the database since it’ll have to be defined first to be used by the bot.</p>
+<p>Nearly all imports used by functions are imported first (outside the function) since they will be used very frequently.</p>
+<section id="database" class="level1">
+<h1>Database</h1>
+<p>This will store various user info and bot settings and will be used internally by our bot.</p>
+<blockquote class="blockquote">
+<p>I’m using Base by deta.sh, it’s a serverless NoSQL database with unlimited storage. Very convenient!</p>
+<p><em>Note: if you want to store data differently, modify the database functions</em></p>
+</blockquote>
+<section id="what-data-will-be-stored" class="level2">
+<h2 class="anchored" data-anchor-id="what-data-will-be-stored">What data will be stored?</h2>
+<ul>
+<li>Dates are UTC in the format <code>dd-mm-yyyy hh:00</code>, in code this is <code>%d-%m-%Y %H:00</code> (see <a href="https://strftime.org/">Python strftime cheatsheet</a> for more formats).</li>
+<li><code>key</code> is required and needs to be unique; keys are automatically generated by Deta if not provided.</li>
+<li><code>chat_id</code> is a unique value given by Telegram and will be used as the key in <strong>settings</strong> since each <code>chat_id</code> needs to be entered only once.</li>
+<li><a href="https://github.com/ahawker/ulid">ULIDs (Universally Unique Lexicographically Sortable Identifiers)</a> are used as keys everywhere else and order is is preserved here since data in <a href="https://docs.deta.sh/docs/base/about/">Bases</a> are ordered by <code>key</code>. <br></li>
+</ul>
+<p><strong>settings</strong></p>
+<p>Bot settings for each chat</p>
+<pre><code>[{'key': '1111',
+  'signature': False,
+  'twitter': 'fxtwitter.com'}]</code></pre>
+<p><br></p>
+<p><strong>total-users</strong></p>
+<p>Everyone who pressed <code>/start</code> in a private chat with our bot</p>
+<pre><code>[{'date': '02-10-2022 17:00',
+  'key': '01BJQMF54D093DXEAWZ6JYRPAQ',
+  'private chat id': 1111,
+  'user id': 1111}]</code></pre>
+<p><br></p>
+<p><strong>current-users</strong></p>
+<p><code>total-users</code> minus people who stopped/blocked our bot</p>
+<pre><code>[{'date': '02-10-2022 17:00',
+  'key': '01BJQMF54D093DXEAWZ6JYRPAQ',
+  'private chat id': 1111,
+  'user id': 1111}]</code></pre>
+<p><br></p>
+<p><strong>message-stats</strong></p>
+<p>Count of how many links were replaced</p>
+<pre><code>[{'date': '02-10-2022 17:00',
+  'key': '01BJQMF54D093DXEAWZ6JYRPAQ',
+  'chat id': 1111,
+  'links replaced': 69}]</code></pre>
+<p><br></p>
+<p><strong>total-groups</strong></p>
+<p>All groups our bot was added to</p>
+<pre><code>[{'date': '02-10-2022 17:00',
+  'key': '01BJQMF54D093DXEAWZ6JYRPAQ',
+  'group chat id': 2222}]</code></pre>
+<p><br></p>
+<p><strong>current-groups</strong></p>
+<p>Current groups our bot is in</p>
+<pre><code>[{'date': '02-10-2022 17:00',
+  'key': '01BJQMF54D093DXEAWZ6JYRPAQ',
+  'group chat id': 2222}]</code></pre>
+<p><br></p>
+<p><strong>admins</strong></p>
+<p>Current list of users added as admins</p>
+<pre><code>[{'date': '02-10-2022 17:00',
+  'key': '01BJQMF54D093DXEAWZ6JYRPAQ',
+  'user id': 1111}]</code></pre>
+<section id="get-a-project-key-from-deta" class="level3">
+<h3 class="anchored" data-anchor-id="get-a-project-key-from-deta">Get a Project Key from Deta</h3>
+<p>To get started, make an account on or log into deta.sh, create a new project and save your <strong>Project Key</strong> as an evironment variable <code>PROJECT_KEY</code>.</p>
+<p>See their docs if you need any help: https://docs.deta.sh/docs/base/about</p>
+</section>
+</section>
+<section id="functions" class="level2">
+<h2 class="anchored" data-anchor-id="functions">Functions</h2>
+<p>Handy functions our bot talk will use to talk to its database.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize with a Project Key</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>deta <span class="op">=</span> Deta(os.environ[<span class="st">"PROJECT_KEY"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="settings" class="level3">
+<h3 class="anchored" data-anchor-id="settings">Settings</h3>
+<p>For this the <code>key</code> in our database will have to be unique so we’ll be using chat IDs</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_setting_signature(chat_id, signature <span class="op">=</span> <span class="va">True</span>):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">    create or update setting: signature</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># connect to or create database.</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(<span class="st">"settings"</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># keys have to be unique so it's the chat_id</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># unix timestamps could've been used as keys but then chat_id will be re-added each time signature is updated</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># since the items are fetched by chat_ids and not keys</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    settings <span class="op">=</span> db.update(</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">"signature"</span>: signature</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="bu">str</span>(chat_id)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"signature updated"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="update_setting_signature" class="level3">
+<h3 class="anchored" data-anchor-id="update_setting_signature">update_setting_signature</h3>
+<blockquote class="blockquote">
+<pre><code> update_setting_signature (chat_id, signature=True)</code></pre>
+</blockquote>
+<p>create or update setting: signature</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_setting_domain(chat_id, domain <span class="op">=</span> <span class="st">"fxtwitter."</span>):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">    create or update setting: domain</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(<span class="st">"settings"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    settings <span class="op">=</span> db.update(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"twitter"</span>: domain</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> <span class="bu">str</span>(chat_id)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"twitter domain updated"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="update_setting_domain" class="level3">
+<h3 class="anchored" data-anchor-id="update_setting_domain">update_setting_domain</h3>
+<blockquote class="blockquote">
+<pre><code> update_setting_domain (chat_id, domain='fxtwitter.')</code></pre>
+</blockquote>
+<p>create or update setting: domain</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> default_settings(chat_id, signature <span class="op">=</span> <span class="va">True</span>, domain <span class="op">=</span> <span class="st">"fxtwitter.com"</span>):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"set default settings"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(<span class="st">"settings"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    settings <span class="op">=</span> db.put(</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"signature"</span>: signature, </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">"twitter"</span>: domain,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"key"</span>: <span class="bu">str</span>(chat_id)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"settings set to default: </span><span class="sc">{</span>settings<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="default_settings" class="level3">
+<h3 class="anchored" data-anchor-id="default_settings">default_settings</h3>
+<blockquote class="blockquote">
+<pre><code> default_settings (chat_id, signature=True, domain='fxtwitter.com')</code></pre>
+</blockquote>
+<p>set default settings</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_settings(chat_id):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">    get settings for a chat</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">    usage:</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">    `get_settings["signature"]`</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">    `get_settings["domain"]`</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(<span class="st">"settings"</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    settings <span class="op">=</span> db.fetch({<span class="st">"key"</span>: <span class="bu">str</span>(chat_id)}).items</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">bool</span>(settings):</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Settings exist"</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> settings[<span class="dv">0</span>]</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="co"># if list is empty a record for the user hasn't been created</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"chat settings doesn't exist; creating new/default settings for this chat"</span>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># set default settings - signature: on, domain: fxtwitter</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>        default_settings(chat_id<span class="op">=</span>chat_id)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        settings <span class="op">=</span> db.fetch({<span class="st">"key"</span>: <span class="bu">str</span>(chat_id)}).items</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> settings[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="get_settings" class="level3">
+<h3 class="anchored" data-anchor-id="get_settings">get_settings</h3>
+<blockquote class="blockquote">
+<pre><code> get_settings (chat_id)</code></pre>
+</blockquote>
+<p>get settings for a chat</p>
+<p>usage: <code>get_settings["signature"]</code> <code>get_settings["domain"]</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> delete_setting(chat_id):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">    deletes a user from a database if they exist in it</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(<span class="st">"settings"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    key <span class="op">=</span> <span class="bu">str</span>(chat_id)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    delete <span class="op">=</span> db.get(key)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if exists, delete</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">bool</span>(delete):</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        db.delete(key)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"settings of </span><span class="sc">{</span>chat_id<span class="sc">}</span><span class="ss"> deleted"</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"settings of user </span><span class="sc">{</span>chat_id<span class="sc">}</span><span class="ss"> don't exist"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="delete_setting" class="level3">
+<h3 class="anchored" data-anchor-id="delete_setting">delete_setting</h3>
+<blockquote class="blockquote">
+<pre><code> delete_setting (chat_id)</code></pre>
+</blockquote>
+<p>deletes a user from a database if they exist in it</p>
+</section>
+<section id="general" class="level3">
+<h3 class="anchored" data-anchor-id="general">General</h3>
+<p>Makes handling info from the database more convenient</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fetch_all(database_name):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">    fetches the whole database</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">    this is from deta's docs: https://docs.deta.sh/docs/base/sdk/#fetch-all-items-1</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(database_name)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> db.fetch()</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    all_items <span class="op">=</span> res.items</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fetch until last is 'None'</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> res.last:</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> db.fetch(last<span class="op">=</span>res.last)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        all_items <span class="op">+=</span> res.items   </span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> all_items</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="fetch_all" class="level3">
+<h3 class="anchored" data-anchor-id="fetch_all">fetch_all</h3>
+<blockquote class="blockquote">
+<pre><code> fetch_all (database_name)</code></pre>
+</blockquote>
+<p>fetches the whole database</p>
+<p>this is from deta’s docs: https://docs.deta.sh/docs/base/sdk/#fetch-all-items-1</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> database_to_dataframe(database_name):</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">    fetches the whole database and converts it to a pandas dataframe</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    all_items <span class="op">=</span> fetch_all(database_name<span class="op">=</span>database_name)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame.from_dict(all_items)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="database_to_dataframe" class="level3">
+<h3 class="anchored" data-anchor-id="database_to_dataframe">database_to_dataframe</h3>
+<blockquote class="blockquote">
+<pre><code> database_to_dataframe (database_name)</code></pre>
+</blockquote>
+<p>fetches the whole database and converts it to a pandas dataframe</p>
+</section>
+<section id="users" class="level3">
+<h3 class="anchored" data-anchor-id="users">Users</h3>
+<p>Unix timespams will be used as keys so order can be preserved.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> save_user(chat_id, user_id, database_name):</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">    save private chat ids to a database</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(database_name)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># check if user exists</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    check <span class="op">=</span> db.fetch({<span class="st">"private chat id"</span>: chat_id, <span class="st">"user id"</span>: user_id}).items</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">bool</span>(check):</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"user already exists in </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># unix timestamps used as keys</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>        user <span class="op">=</span> db.put(</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>                <span class="st">"private chat id"</span>: chat_id, </span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>                <span class="st">"user id"</span>: user_id,</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>: datetime.now().strftime(<span class="st">"</span><span class="sc">%d</span><span class="st">-%m-%Y %H:00"</span>),</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>                <span class="st">"key"</span>: ulid.new().<span class="bu">str</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"added to </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>user<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="save_user" class="level3">
+<h3 class="anchored" data-anchor-id="save_user">save_user</h3>
+<blockquote class="blockquote">
+<pre><code> save_user (chat_id, user_id, database_name)</code></pre>
+</blockquote>
+<p>save private chat ids to a database</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> delete_user(chat_id, user_id, database_name):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">    deletes a user from a database if they exist in it</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(database_name)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    delete <span class="op">=</span> db.fetch(</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"private chat id"</span>: chat_id,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"user id"</span>: user_id</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    ).items</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if exists, delete</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">bool</span>(delete):</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> delete[<span class="dv">0</span>][<span class="st">"key"</span>]</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>        db.delete(key)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"user </span><span class="sc">{</span>user_id<span class="sc">}</span><span class="ss"> deleted from </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"user </span><span class="sc">{</span>user_id<span class="sc">}</span><span class="ss"> not in </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="delete_user" class="level3">
+<h3 class="anchored" data-anchor-id="delete_user">delete_user</h3>
+<blockquote class="blockquote">
+<pre><code> delete_user (chat_id, user_id, database_name)</code></pre>
+</blockquote>
+<p>deletes a user from a database if they exist in it</p>
+<p>Blocked users are deleted from <code>current-users</code>. If you want to maintain a separate <code>blocked</code> database, use the commented out code at the end of <code>update_users()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_users(chat_id, user_id, blocked<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">    save private chat ids to "total users" and "current users"</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">    total users: all users who have started the bot</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">    blocked: users who have blocked the bot (NOT done by default)</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">    current users:  total users - blocked</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> blocked <span class="op">==</span> <span class="va">False</span>:</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        databases <span class="op">=</span> [<span class="st">"total-users"</span>, <span class="st">"current-users"</span>]</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> database <span class="kw">in</span> databases:</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>            save_user(chat_id<span class="op">=</span>chat_id, user_id<span class="op">=</span>user_id, database_name<span class="op">=</span>database)</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="co"># delete blocked user from current-users</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>        delete_user(chat_id<span class="op">=</span>chat_id, user_id<span class="op">=</span>user_id, database_name<span class="op">=</span><span class="st">"current-users"</span>)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>        delete_setting(chat_id<span class="op">=</span>chat_id)</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># dealing with blocked users with a separate "blocked" database</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># else:</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     save_user(chat_id=chat_id, user_id=user_id, database_name="blocked")</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     # blocked = deta.Base("blocked")</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     current = deta.Base("current-users")</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     # get all items from blocked list</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     all_blocked = fetch_all(database_name="blocked")</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     # search for blocked users in current users</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     remove_from_current = current.fetch(all_blocked).items</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     # get the keys for items to remove from current</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     for item in remove_from_current:</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">#         # and delete</span></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">#         current.delete(item["key"])</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">#         print(f"{item['user id']} removed from current users")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="update_users" class="level3">
+<h3 class="anchored" data-anchor-id="update_users">update_users</h3>
+<blockquote class="blockquote">
+<pre><code> update_users (chat_id, user_id, blocked=False)</code></pre>
+</blockquote>
+<p>save private chat ids to “total users” and “current users”</p>
+<p>total users: all users who have started the bot blocked: users who have blocked the bot (NOT done by default) current users: total users - blocked</p>
+</section>
+<section id="admins" class="level3">
+<h3 class="anchored" data-anchor-id="admins">Admins</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> save_admin(user_id, database_name):</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">    save admin user ids to a database</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># connect to or create database.</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(database_name)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># check if user exists</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    check <span class="op">=</span> db.fetch({<span class="st">"user id"</span>: user_id}).items</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">bool</span>(check):</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"user already exists in </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># unix timestamps used as keys</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>        user <span class="op">=</span> db.put(</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>                <span class="st">"user id"</span>: user_id,</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>: datetime.now().strftime(<span class="st">"</span><span class="sc">%d</span><span class="st">-%m-%Y %H:00"</span>),</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>                <span class="st">"key"</span>: ulid.new().<span class="bu">str</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"added to </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>user<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="save_admin" class="level3">
+<h3 class="anchored" data-anchor-id="save_admin">save_admin</h3>
+<blockquote class="blockquote">
+<pre><code> save_admin (user_id, database_name)</code></pre>
+</blockquote>
+<p>save admin user ids to a database</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> delete_admin(user_id, database_name):</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">    deletes an admin from a database if they exist in it</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(database_name)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    delete <span class="op">=</span> db.fetch(</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"user id"</span>: user_id</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    ).items</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if exists, delete</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">bool</span>(delete):</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> delete[<span class="dv">0</span>][<span class="st">"key"</span>]</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>        db.delete(key)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"admin </span><span class="sc">{</span>user_id<span class="sc">}</span><span class="ss"> deleted from </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"admin </span><span class="sc">{</span>user_id<span class="sc">}</span><span class="ss"> not in </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="delete_admin" class="level3">
+<h3 class="anchored" data-anchor-id="delete_admin">delete_admin</h3>
+<blockquote class="blockquote">
+<pre><code> delete_admin (user_id, database_name)</code></pre>
+</blockquote>
+<p>deletes an admin from a database if they exist in it</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_admins(user_id, action<span class="op">=</span><span class="st">"add"</span>):</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"add or remove users from the admin database"</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> action<span class="op">==</span><span class="st">"add"</span>:</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> save_admin(user_id<span class="op">=</span>user_id, database_name<span class="op">=</span><span class="st">"admins"</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> action<span class="op">==</span><span class="st">"remove"</span>:</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> delete_admin(user_id<span class="op">=</span>user_id, database_name<span class="op">=</span><span class="st">"admins"</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"action needs to be either 'add' or 'remove'"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="update_admins" class="level3">
+<h3 class="anchored" data-anchor-id="update_admins">update_admins</h3>
+<blockquote class="blockquote">
+<pre><code> update_admins (user_id, action='add')</code></pre>
+</blockquote>
+<p>add or remove users from the admin database</p>
+</section>
+<section id="messages" class="level3">
+<h3 class="anchored" data-anchor-id="messages">Messages</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_message_count(chat_id):</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co">    save and update messages/links seen</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># connect to or create database.</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(<span class="st">"message-stats"</span>)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># check if todays date exists in records</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># incremenet message count if yes</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># chat id used as keys</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># unix timestamps used as keys</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    check <span class="op">=</span> db.fetch(</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">"chat id"</span>: chat_id, </span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">"date"</span>: datetime.now().strftime(<span class="st">"</span><span class="sc">%d</span><span class="st">-%m-%Y %H:00"</span>)</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>            ).items</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">bool</span>(check):</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># get key from existing record</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> check[<span class="dv">0</span>][<span class="st">"key"</span>]</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>     <span class="co"># use the same key to update an existing record</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>        messages <span class="op">=</span> db.update(</span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>                <span class="st">"links replaced"</span>: db.util.increment(<span class="dv">1</span>)</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>            },</span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>            key <span class="op">=</span> key</span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"message count updated for chat: </span><span class="sc">{</span>chat_id<span class="sc">}</span><span class="ss"> at key: </span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="co"># create record</span></span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>        messages <span class="op">=</span> db.put(</span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>: datetime.now().strftime(<span class="st">"</span><span class="sc">%d</span><span class="st">-%m-%Y %H:00"</span>),</span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>                <span class="st">"chat id"</span>: chat_id, </span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>                <span class="st">"links replaced"</span>: <span class="bu">int</span>(<span class="dv">1</span>),</span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>                <span class="st">"key"</span>: ulid.new().<span class="bu">str</span></span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"record created: </span><span class="sc">{</span>messages<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="update_message_count" class="level3">
+<h3 class="anchored" data-anchor-id="update_message_count">update_message_count</h3>
+<blockquote class="blockquote">
+<pre><code> update_message_count (chat_id)</code></pre>
+</blockquote>
+<p>save and update messages/links seen</p>
+</section>
+<section id="group" class="level3">
+<h3 class="anchored" data-anchor-id="group">Group</h3>
+<p>Similar functions to <code>Users</code> but for groups.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> save_group(chat_id, database_name):</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co">    save group chat ids to a database</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># connect to or create database.</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(database_name)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># check if user exists</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    check <span class="op">=</span> db.fetch({<span class="st">"group chat id"</span>: chat_id}).items</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">bool</span>(check):</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"user already exists in </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># unix timestamps used as keys</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>        group <span class="op">=</span> db.put(</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>                <span class="st">"group chat id"</span>: chat_id,</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>: datetime.now().strftime(<span class="st">"</span><span class="sc">%d</span><span class="st">-%m-%Y %H:00"</span>),</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>                <span class="st">"key"</span>: ulid.new().<span class="bu">str</span></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"added to </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>group<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="save_group" class="level3">
+<h3 class="anchored" data-anchor-id="save_group">save_group</h3>
+<blockquote class="blockquote">
+<pre><code> save_group (chat_id, database_name)</code></pre>
+</blockquote>
+<p>save group chat ids to a database</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> delete_group(chat_id, database_name):</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co">    deletes a group from a database if it exists in it</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(database_name)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    delete <span class="op">=</span> db.fetch(</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"group chat id"</span>: chat_id</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    ).items</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if exists, delete</span></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">bool</span>(delete):</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>        key <span class="op">=</span> delete[<span class="dv">0</span>][<span class="st">"key"</span>]</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>        db.delete(key)</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"group </span><span class="sc">{</span>chat_id<span class="sc">}</span><span class="ss"> deleted from </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"group </span><span class="sc">{</span>chat_id<span class="sc">}</span><span class="ss"> not in </span><span class="sc">{</span>database_name<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="delete_group" class="level3">
+<h3 class="anchored" data-anchor-id="delete_group">delete_group</h3>
+<blockquote class="blockquote">
+<pre><code> delete_group (chat_id, database_name)</code></pre>
+</blockquote>
+<p>deletes a group from a database if it exists in it</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_groups(chat_id, removed<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co">    save group chat ids to "total groups" and "current groups"</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co">    total groups: all users who have started the bot</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co">    current groups:  total users - blocked</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> removed <span class="op">==</span> <span class="va">False</span>:</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>        databases <span class="op">=</span> [<span class="st">"total-groups"</span>, <span class="st">"current-groups"</span>]</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> database <span class="kw">in</span> databases:</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>            save_group(chat_id<span class="op">=</span>chat_id, database_name<span class="op">=</span>database)</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="co"># delete blocked user from current-groups</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>        delete_group(chat_id<span class="op">=</span>chat_id, database_name<span class="op">=</span><span class="st">"current-groups"</span>)</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>        delete_setting(chat_id<span class="op">=</span>chat_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="update_groups" class="level3">
+<h3 class="anchored" data-anchor-id="update_groups">update_groups</h3>
+<blockquote class="blockquote">
+<pre><code> update_groups (chat_id, removed=False)</code></pre>
+</blockquote>
+<p>save group chat ids to “total groups” and “current groups”</p>
+<p>total groups: all users who have started the bot current groups: total users - blocked</p>
+</section>
+<section id="statistics" class="level3">
+<h3 class="anchored" data-anchor-id="statistics">Statistics</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_message_count(chat_id):</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co">    gets stats (number of links replaced) for a given chat id</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># connect to or create database.</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> deta.Base(<span class="st">"message-stats"</span>)</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># get data for a sepcific chat id</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> db.fetch(</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">"chat id"</span>: chat_id</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>            ).items</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># load into pandas and group by the chat id column</span></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame.from_dict(data)</span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> df.groupby(<span class="st">'chat id'</span>, as_index<span class="op">=</span><span class="va">False</span>).<span class="bu">sum</span>()</span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>        messages <span class="op">=</span> df[<span class="st">'links replaced'</span>][<span class="dv">0</span>]</span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>: <span class="co"># if there's 0 messages for the chat</span></span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>        messages <span class="op">=</span> <span class="dv">0</span>    </span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> messages</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="get_message_count" class="level3">
+<h3 class="anchored" data-anchor-id="get_message_count">get_message_count</h3>
+<blockquote class="blockquote">
+<pre><code> get_message_count (chat_id)</code></pre>
+</blockquote>
+<p>gets stats (number of links replaced) for a given chat id</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> all_stats():</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">    get stats on number of users, chats and messages</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">    it returns five variables: users, groups, messages, total_users, total_groups</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    users <span class="op">=</span> database_to_dataframe(<span class="st">"current-users"</span>)<span class="op">\</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>            [<span class="st">"private chat id"</span>].count()</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>        groups <span class="op">=</span> database_to_dataframe(<span class="st">"current-groups"</span>)<span class="op">\</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>                [<span class="st">"group chat id"</span>].count()</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>        groups <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>    messages <span class="op">=</span> database_to_dataframe(<span class="st">"message-stats"</span>)<span class="op">\</span></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>            [<span class="st">"links replaced"</span>].<span class="bu">sum</span>()</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>    total_users <span class="op">=</span> database_to_dataframe(<span class="st">"total-users"</span>)<span class="op">\</span></span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>            [<span class="st">"private chat id"</span>].count()</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>    total_groups <span class="op">=</span> database_to_dataframe(<span class="st">"total-groups"</span>)<span class="op">\</span></span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>            [<span class="st">"group chat id"</span>].count()</span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> users, groups, messages, total_users, total_groups</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="all_stats" class="level3">
+<h3 class="anchored" data-anchor-id="all_stats">all_stats</h3>
+<blockquote class="blockquote">
+<pre><code> all_stats ()</code></pre>
+</blockquote>
+<p>get stats on number of users, chats and messages</p>
+<p>it returns five variables: users, groups, messages, total_users, total_groups</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> admin_stats():</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co">    shows number of admins</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    admins <span class="op">=</span> database_to_dataframe(<span class="st">"admins"</span>)<span class="op">\</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>            [<span class="st">"user id"</span>].count()</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> admins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="admin_stats" class="level3">
+<h3 class="anchored" data-anchor-id="admin_stats">admin_stats</h3>
+<blockquote class="blockquote">
+<pre><code> admin_stats ()</code></pre>
+</blockquote>
+<p>shows number of admins</p>
+</section>
+</section>
+<section id="the-bot" class="level2">
+<h2 class="anchored" data-anchor-id="the-bot">The bot</h2>
+<p>Our bot will do something when it sees a command like <code>/start</code> or notices a link that needs to be sneakily [or not so sneakily] replaced</p>
+<ul>
+<li>Built using https://github.com/eternnoir/pyTelegramBotAPI</li>
+</ul>
+<section id="create-a-telegram-bot" class="level4">
+<h4 class="anchored" data-anchor-id="create-a-telegram-bot">Create a Telegram bot</h4>
+<p>Chat with https://t.me/BotFather to create a new Telegram bot and save the API token as an environment variable <code>BOT_TOKEN</code>.</p>
+<p>Instantiate our bot! 🤖</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>bot <span class="op">=</span> telebot.TeleBot(os.environ[<span class="st">"BOT_TOKEN"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="start" class="level3">
+<h3 class="anchored" data-anchor-id="start"><code>/start</code></h3>
+<ul>
+<li>Sends a welcome message; only avilable in a private chat.</li>
+<li>Updates our database:
+<ul>
+<li>Creates a new user entry in <code>total-users</code> and <code>current-users</code> if it doesn’t exist.</li>
+<li><em>Default:</em> if someone is restarting our bot after blocking, they’ll be added back to <code>current-users</code>.</li>
+<li><em>Optional:</em> <code>blocked</code> is updated if our bot is restarted. See the commented out <code>delete_user()</code>.</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="at">@bot.message_handler</span>(commands<span class="op">=</span>[<span class="st">'start'</span>], chat_types<span class="op">=</span>[<span class="st">'private'</span>])</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> send_welcome(message):</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"send a message when `/start` is sent in a private chat"</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># delete_user(chat_id=message.chat.id, user_id=message.from_user.id, database="blocked") # use only for having a separate "blocked" database</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    update_users(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, user_id<span class="op">=</span>message.from_user.<span class="bu">id</span>, blocked<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    default_settings(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, signature<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span><span class="st">"Welcome to Link Ninja! </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"This bot will replace all Twitter links with fxtwitter.com by default. </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"You can change this to nitter.net or a custom domain. </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Use /help to see how it works."</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>    bot.reply_to(message, text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="send_welcome" class="level3">
+<h3 class="anchored" data-anchor-id="send_welcome">send_welcome</h3>
+<blockquote class="blockquote">
+<pre><code> send_welcome (message)</code></pre>
+</blockquote>
+<p>send a message when <code>/start</code> is sent in a private chat</p>
+</section>
+<section id="settings-1" class="level3">
+<h3 class="anchored" data-anchor-id="settings-1">Settings</h3>
+<ul>
+<li><p>Signature <code>/signature on</code> or <code>off</code> to show the original link along with who sent it</p></li>
+<li><p>Domain <code>/domain {domain.tld}</code> to change the domain from the default fxtwitter.com</p></li>
+</ul>
+<p>A message with a defined <code>/{command}</code> will be heard by our bot. To know what settings to change, our bot will accept messages in the format <code>/{setting name} {setting update}</code>.</p>
+<p>For example <code>/signature on</code> or <code>/domain nitter.net</code>.</p>
+<p>The setting will be parsed from the message like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>message <span class="op">=</span> <span class="st">"/signature on"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Whitespace is removed first</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>message.replace(<span class="st">" "</span>, <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>'/signatureon'</code></pre>
+</div>
+</div>
+<p>Then split at the command</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>message.replace(<span class="st">" "</span>, <span class="st">""</span>).split(<span class="st">'/signature'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>['', 'on']</code></pre>
+</div>
+</div>
+<p>And finally, the setting itself is selected</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>message.replace(<span class="st">" "</span>, <span class="st">""</span>).split(<span class="st">'/signature'</span>)[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>'on'</code></pre>
+</div>
+</div>
+<p>Only admins should be able to change settings in a group chat, so lets make a function for that.</p>
+<p>It will return <code>True</code> if the user is an admin, owner or it’s a private chat.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_admin(chat_id, user_id):</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="co">    check whether a user is an admin</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="co">    works in both private and groups chats</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> bot.get_chat_member(chat_id, user_id).status <span class="kw">in</span> [<span class="st">'creator'</span>, <span class="st">'administrator'</span>]:</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>        admin <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>        admin <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> bot.get_chat(chat_id).<span class="bu">type</span> <span class="op">==</span> <span class="st">"private"</span> <span class="kw">or</span> admin <span class="op">==</span> <span class="va">True</span>:</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="is_admin" class="level3">
+<h3 class="anchored" data-anchor-id="is_admin">is_admin</h3>
+<blockquote class="blockquote">
+<pre><code> is_admin (chat_id, user_id)</code></pre>
+</blockquote>
+<p>check whether a user is an admin</p>
+<p>works in both private and groups chats</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="at">@bot.message_handler</span>(commands<span class="op">=</span>[<span class="st">'signature'</span>])</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> signature_setting(message):</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"changes `/signature` setting"</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> is_admin(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, user_id<span class="op">=</span>message.from_user.<span class="bu">id</span>):</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>        signature <span class="op">=</span> message.text.replace(<span class="st">" "</span>, <span class="st">""</span>).split(<span class="st">'/signature'</span>)[<span class="dv">1</span>]</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> signature <span class="op">==</span> <span class="st">'on'</span>:</span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>            update_setting_signature(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, signature<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="st">"Signatures turned on"</span>)</span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> signature <span class="op">==</span> <span class="st">'off'</span>:</span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>            update_setting_signature(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, signature<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="st">"Signatures turned off"</span>)</span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="st">'Use "/signature on" or "/signature off"'</span>)</span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a>        bot.reply_to(message, <span class="st">"Beg your superior admin to change this setting"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="signature_setting" class="level3">
+<h3 class="anchored" data-anchor-id="signature_setting">signature_setting</h3>
+<blockquote class="blockquote">
+<pre><code> signature_setting (message)</code></pre>
+</blockquote>
+<p>changes <code>/signature</code> setting</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="at">@bot.message_handler</span>(commands<span class="op">=</span>[<span class="st">'domain'</span>])</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> domain_setting(message):</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"changes `/domain` setting"</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> is_admin(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, user_id<span class="op">=</span>message.from_user.<span class="bu">id</span>):</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>        custom_domain <span class="op">=</span> message.text.replace(<span class="st">" "</span>, <span class="st">""</span>).split(<span class="st">'/domain'</span>)[<span class="dv">1</span>]</span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> custom_domain <span class="op">==</span> <span class="st">'reset'</span>:</span>
+<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>            update_setting_domain(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, domain<span class="op">=</span><span class="st">"fxtwitter.com"</span>)</span>
+<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="st">"Reset to fxtwitter.com"</span>)</span>
+<span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> validators.domain(custom_domain):</span>
+<span id="cb63-13"><a href="#cb63-13" aria-hidden="true" tabindex="-1"></a>            update_setting_domain(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, domain<span class="op">=</span>custom_domain)</span>
+<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="ss">f"Custom domain set to </span><span class="sc">{</span>custom_domain<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="st">'Use the format "/domain nitter.net" or reset with "/domain reset"'</span>)</span>
+<span id="cb63-17"><a href="#cb63-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-18"><a href="#cb63-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb63-19"><a href="#cb63-19" aria-hidden="true" tabindex="-1"></a>        bot.reply_to(message, <span class="st">"Beg your superior admin to change this setting"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="domain_setting" class="level3">
+<h3 class="anchored" data-anchor-id="domain_setting">domain_setting</h3>
+<blockquote class="blockquote">
+<pre><code> domain_setting (message)</code></pre>
+</blockquote>
+<p>changes <code>/domain</code> setting</p>
+</section>
+<section id="replacing-twitter-links" class="level3">
+<h3 class="anchored" data-anchor-id="replacing-twitter-links">Replacing twitter links</h3>
+<p><strong>What will this do?</strong> - Detect twitter links - Send a new message with the domain replaced - New message will have the original link and sender name (default, can be turned off) - Deletes the original message that had the link <br></p>
+<p><strong>How will it find links?</strong> - Regex <br></p>
+<p><strong>Criteria:</strong> - Any twitter link that isn’t a profile - Messages that only contain links i.e.&nbsp;no whitespace</p>
+<section id="parsing-links-from-messages" class="level4">
+<h4 class="anchored" data-anchor-id="parsing-links-from-messages">Parsing links from messages</h4>
+<p>Done with <code>urlparse</code> which is part of python. Here’s an example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.parse <span class="im">import</span> urlparse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">'https://twitter.com/MKBHD/status/1569801859325431808?s=19'</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>parse <span class="op">=</span> urlparse(url)</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="ss">f"</span><span class="sc">{</span>parse<span class="sc">.</span>scheme<span class="sc">}</span><span class="ss">://fx</span><span class="sc">{</span>parse<span class="sc">.</span>netloc<span class="sc">}{</span>parse<span class="sc">.</span>path<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>'https://fxtwitter.com/MKBHD/status/1569801859325431808'</code></pre>
+</div>
+</div>
+<p>Here’s a function that will replace the domain with the one specified in our settings databse:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> replace_link(text, chat_id):</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"check chat settings and replace the domain in URLs"</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> urllib.parse <span class="im">import</span> urlparse</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>    parse <span class="op">=</span> urlparse(text)</span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>    custom_domain <span class="op">=</span> get_settings(chat_id)[<span class="st">"twitter"</span>]</span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span>parse<span class="sc">.</span>scheme<span class="sc">}</span><span class="ss">://</span><span class="sc">{</span>custom_domain<span class="sc">}{</span>parse<span class="sc">.</span>path<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="replace_link" class="level3">
+<h3 class="anchored" data-anchor-id="replace_link">replace_link</h3>
+<blockquote class="blockquote">
+<pre><code> replace_link (text, chat_id)</code></pre>
+</blockquote>
+<p>check chat settings and replace the domain in URLs</p>
+<section id="finding-messages-twitter-links" class="level4">
+<h4 class="anchored" data-anchor-id="finding-messages-twitter-links">Finding messages Twitter links</h4>
+<section id="making-the-regular-expresion" class="level5">
+<h5 class="anchored" data-anchor-id="making-the-regular-expresion">Making the regular expresion:</h5>
+<ol type="1">
+<li>Get twitter links</li>
+</ol>
+<ul>
+<li><a href="https://stackoverflow.com/questions/6024848/regex-to-validate-a-twitter-url">Regex to validate a twitter url</a> modified to get only links to tweets instead of profiles.</li>
+<li>Done by selecting for https://twitter.com/{profile}/status.</li>
+</ul>
+<ol start="2" type="1">
+<li>Get messages that only have links</li>
+</ol>
+<ul>
+<li>Done by filtering for twitter links + no whitespace</li>
+<li><a href="https://stackoverflow.com/questions/3020760/what-is-the-regular-expression-for-matching-that-contains-no-white-space-in-betw#3020813">What is the regular expression for matching that contains no white space in between text?</a> modified to get all messages without whitespace.</li>
+</ul>
+<ol start="3" type="1">
+<li>Combine both</li>
+</ol>
+<ul>
+<li>Using the pattern <code>/^(?=^abc)(?=.*xyz$)(?=.*123)(?=^(?:(?!456).)*$).*$/</code> from <a href="https://stackoverflow.com/questions/869809/combine-regexp/870506#870506">Combine Regexp?</a> <br></li>
+</ul>
+<p><strong>Final expression used by our bot:</strong></p>
+<ul>
+<li><code>^(?=.*(http(?:s)?:\/\/(?:www)?twitter\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9_]+)))(?=.*(^\s*\S+\s*)$).*$</code></li>
+<li>Available here: https://rubular.com/r/pJRmWeFvKk</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/regex.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Picture title</figcaption>
+</figure>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="at">@bot.message_handler</span>(regexp<span class="op">=</span><span class="st">"^(?=.*(http(?:s)?:\/\/(?:www)?twitter\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9_]+)))(?=.*(^\s*\S+\s*)$).*$"</span>)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> send_new_link(message):</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="co">    - replaces twitter links with a domain specified in settings using `replace_link()`</span></span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="co">    - sends a new message with the updated link</span></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="co">    - deletes the original link unless it's a private chat</span></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if signature: off</span></span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> get_settings(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>)[<span class="st">"signature"</span>] <span class="op">==</span> <span class="va">False</span>:</span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>        user <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb70-14"><a href="#cb70-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check if username has been set so they can be tagged/mentioned</span></span>
+<span id="cb70-15"><a href="#cb70-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># if no username, mention with first and last name</span></span>
+<span id="cb70-16"><a href="#cb70-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> message.from_user.username <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb70-17"><a href="#cb70-17" aria-hidden="true" tabindex="-1"></a>            <span class="co"># all users will have a first name</span></span>
+<span id="cb70-18"><a href="#cb70-18" aria-hidden="true" tabindex="-1"></a>            <span class="co"># check if last name exists</span></span>
+<span id="cb70-19"><a href="#cb70-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> message.from_user.last_name:</span>
+<span id="cb70-20"><a href="#cb70-20" aria-hidden="true" tabindex="-1"></a>                name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>message<span class="sc">.</span>from_user<span class="sc">.</span>first_name<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>message<span class="sc">.</span>from_user<span class="sc">.</span>last_name<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb70-21"><a href="#cb70-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb70-22"><a href="#cb70-22" aria-hidden="true" tabindex="-1"></a>                name <span class="op">=</span> message.from_user.first_name</span>
+<span id="cb70-23"><a href="#cb70-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-24"><a href="#cb70-24" aria-hidden="true" tabindex="-1"></a>            user <span class="op">=</span> <span class="ss">f"&lt;a href='tg://user?id=</span><span class="sc">{</span>message<span class="sc">.</span>from_user<span class="sc">.</span><span class="bu">id</span><span class="sc">}</span><span class="ss">'&gt;</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">&lt;/a&gt;"</span></span>
+<span id="cb70-25"><a href="#cb70-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb70-26"><a href="#cb70-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># if username exists, use that</span></span>
+<span id="cb70-27"><a href="#cb70-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> message.from_user.username:</span>
+<span id="cb70-28"><a href="#cb70-28" aria-hidden="true" tabindex="-1"></a>            user <span class="op">=</span> <span class="ss">f"@</span><span class="sc">{</span>message<span class="sc">.</span>from_user<span class="sc">.</span>username<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb70-29"><a href="#cb70-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-30"><a href="#cb70-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># if it's a channel/group with a username, use that  </span></span>
+<span id="cb70-31"><a href="#cb70-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> message.sender_chat.username:</span>
+<span id="cb70-32"><a href="#cb70-32" aria-hidden="true" tabindex="-1"></a>            user <span class="op">=</span> <span class="ss">f"@</span><span class="sc">{</span>message<span class="sc">.</span>sender_chat<span class="sc">.</span>username<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb70-33"><a href="#cb70-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-34"><a href="#cb70-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># or use the channel/group title</span></span>
+<span id="cb70-35"><a href="#cb70-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> message.sender_chat.title:</span>
+<span id="cb70-36"><a href="#cb70-36" aria-hidden="true" tabindex="-1"></a>            user <span class="op">=</span> <span class="ss">f"&lt;b&gt;</span><span class="sc">{</span>message<span class="sc">.</span>sender_chat<span class="sc">.</span>title<span class="sc">}</span><span class="ss">&lt;/b&gt;"</span></span>
+<span id="cb70-37"><a href="#cb70-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-38"><a href="#cb70-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb70-39"><a href="#cb70-39" aria-hidden="true" tabindex="-1"></a>            user <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb70-40"><a href="#cb70-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-41"><a href="#cb70-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># message to send along with the fxtweet/new link</span></span>
+<span id="cb70-42"><a href="#cb70-42" aria-hidden="true" tabindex="-1"></a>    ninja_link <span class="op">=</span> replace_link(text<span class="op">=</span>message.text, chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>)</span>
+<span id="cb70-43"><a href="#cb70-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-44"><a href="#cb70-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> user <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb70-45"><a href="#cb70-45" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>ninja_link<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb70-46"><a href="#cb70-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb70-47"><a href="#cb70-47" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>ninja_link<span class="sc">}</span><span class="ch">\n\n</span><span class="ss">"</span> \</span>
+<span id="cb70-48"><a href="#cb70-48" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"&lt;a href='</span><span class="sc">{</span>message<span class="sc">.</span>text<span class="sc">}</span><span class="ss">'&gt;Tweet&lt;/a&gt; sent by </span><span class="sc">{</span>user<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb70-49"><a href="#cb70-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-50"><a href="#cb70-50" aria-hidden="true" tabindex="-1"></a>    bot.send_message(</span>
+<span id="cb70-51"><a href="#cb70-51" aria-hidden="true" tabindex="-1"></a>        message.chat.<span class="bu">id</span>,</span>
+<span id="cb70-52"><a href="#cb70-52" aria-hidden="true" tabindex="-1"></a>        parse_mode<span class="op">=</span><span class="st">"HTML"</span>,</span>
+<span id="cb70-53"><a href="#cb70-53" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span>text</span>
+<span id="cb70-54"><a href="#cb70-54" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb70-55"><a href="#cb70-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-56"><a href="#cb70-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-57"><a href="#cb70-57" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if it's not a private chat, delete the original message/link</span></span>
+<span id="cb70-58"><a href="#cb70-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> message.chat.<span class="bu">type</span> <span class="op">!=</span> <span class="st">"private"</span>:</span>
+<span id="cb70-59"><a href="#cb70-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-60"><a href="#cb70-60" aria-hidden="true" tabindex="-1"></a>        bot.delete_message(</span>
+<span id="cb70-61"><a href="#cb70-61" aria-hidden="true" tabindex="-1"></a>            chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>,</span>
+<span id="cb70-62"><a href="#cb70-62" aria-hidden="true" tabindex="-1"></a>            message_id<span class="op">=</span>message.message_id</span>
+<span id="cb70-63"><a href="#cb70-63" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb70-64"><a href="#cb70-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-65"><a href="#cb70-65" aria-hidden="true" tabindex="-1"></a>    <span class="co"># update message count</span></span>
+<span id="cb70-66"><a href="#cb70-66" aria-hidden="true" tabindex="-1"></a>    update_message_count(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+</section>
+<section id="send_new_link" class="level3">
+<h3 class="anchored" data-anchor-id="send_new_link">send_new_link</h3>
+<blockquote class="blockquote">
+<pre><code> send_new_link (message)</code></pre>
+</blockquote>
+<ul>
+<li>replaces twitter links with a domain specified in settings using <code>replace_link()</code></li>
+<li>sends a new message with the updated link</li>
+<li>deletes the original link unless it’s a private chat</li>
+</ul>
+</section>
+<section id="bot-added-or-removed" class="level3">
+<h3 class="anchored" data-anchor-id="bot-added-or-removed">Bot added or removed</h3>
+<section id="when-our-bot-is-added-to-a-group" class="level4">
+<h4 class="anchored" data-anchor-id="when-our-bot-is-added-to-a-group">When our bot is added to a group</h4>
+<p><strong>What do we do?</strong> ~Celebrate! 🥳~ Update our <code>group</code> database.</p>
+<p><strong>What about for private chat?</strong> That’s done in <code>send_welcome()</code> when someone sends <code>/start</code> to our dear bot 🙂.</p>
+</section>
+<section id="got-blocked" class="level4">
+<h4 class="anchored" data-anchor-id="got-blocked">Got blocked? :(</h4>
+<p>Those losers need to get removed (from our database 😇).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="at">@bot.my_chat_member_handler</span>()</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> added_or_blocked(message: telebot.types.ChatMemberUpdated):</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"updates our database when added to a group"</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>    new <span class="op">=</span> message.new_chat_member</span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> new.status <span class="kw">in</span> [<span class="st">"member"</span>, <span class="st">"creator"</span>, <span class="st">"administrator"</span>]:</span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> message.chat.<span class="bu">type</span> <span class="op">==</span> <span class="st">"group"</span>:</span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a>            update_groups(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, removed<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"added to group: </span><span class="sc">{</span>message<span class="sc">.</span>chat<span class="sc">.</span><span class="bu">id</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb72-11"><a href="#cb72-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-12"><a href="#cb72-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> new.status <span class="kw">not</span> <span class="kw">in</span> [<span class="st">"member"</span>, <span class="st">"creator"</span>, <span class="st">"administrator"</span>] <span class="kw">or</span> new.status <span class="op">==</span> <span class="st">"kicked"</span>:</span>
+<span id="cb72-13"><a href="#cb72-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> message.chat.<span class="bu">type</span> <span class="op">==</span> <span class="st">"group"</span>:</span>
+<span id="cb72-14"><a href="#cb72-14" aria-hidden="true" tabindex="-1"></a>            update_groups(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, removed<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb72-15"><a href="#cb72-15" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"got removed from group: </span><span class="sc">{</span>message<span class="sc">.</span>chat<span class="sc">.</span><span class="bu">id</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb72-16"><a href="#cb72-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-17"><a href="#cb72-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> message.chat.<span class="bu">type</span> <span class="op">==</span> <span class="st">"private"</span>:</span>
+<span id="cb72-18"><a href="#cb72-18" aria-hidden="true" tabindex="-1"></a>            update_users(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, user_id<span class="op">=</span>message.from_user.<span class="bu">id</span>, blocked<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb72-19"><a href="#cb72-19" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"got blocked in private chat: </span><span class="sc">{</span>message<span class="sc">.</span>chat<span class="sc">.</span><span class="bu">id</span><span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="added_or_blocked" class="level3">
+<h3 class="anchored" data-anchor-id="added_or_blocked">added_or_blocked</h3>
+<blockquote class="blockquote">
+<pre><code> added_or_blocked (message:telebot.types.ChatMemberUpdated)</code></pre>
+</blockquote>
+<p>updates our database when added to a group</p>
+</section>
+<section id="stats" class="level3">
+<h3 class="anchored" data-anchor-id="stats"><code>/stats</code></h3>
+<p>Shows count of links replaced in chat chat the command is used.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="at">@bot.message_handler</span>(commands<span class="op">=</span>[<span class="st">'stats'</span>])</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> message_count(message):</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Show message count for the chat this command is used in"</span></span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>    stats <span class="op">=</span> get_message_count(chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>)</span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>stats<span class="sc">}</span><span class="ss"> links replaced by Link Ninja in this chat"</span></span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>    bot.reply_to(message, text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="message_count" class="level3">
+<h3 class="anchored" data-anchor-id="message_count">message_count</h3>
+<blockquote class="blockquote">
+<pre><code> message_count (message)</code></pre>
+</blockquote>
+<p>Show message count for the chat this command is used in</p>
+</section>
+<section id="allstats" class="level3">
+<h3 class="anchored" data-anchor-id="allstats"><code>/allstats</code></h3>
+<p>Shows total count of chats and messages</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="at">@bot.message_handler</span>(commands<span class="op">=</span>[<span class="st">'allstats'</span>])</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> signature_setting(message):</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"show all bot stats"</span></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>    users, groups, messages, total_users, total_groups <span class="op">=</span> all_stats()</span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span><span class="st">"&lt;b&gt;Link Ninja stats&lt;/b&gt; </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"&lt;i&gt;All time&lt;/i&gt; </span><span class="ch">\n</span><span class="ss">"</span> \</span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Links replaced: </span><span class="sc">{</span>messages<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">"</span> \</span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Users: </span><span class="sc">{</span>total_users<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">"</span> \</span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Groups: </span><span class="sc">{</span>total_groups<span class="sc">}</span><span class="ss"> </span><span class="ch">\n\n</span><span class="ss">"</span> \</span>
+<span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"&lt;i&gt;Current&lt;/i&gt; </span><span class="ch">\n</span><span class="ss">"</span> \</span>
+<span id="cb76-13"><a href="#cb76-13" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Users: </span><span class="sc">{</span>users<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">"</span> \</span>
+<span id="cb76-14"><a href="#cb76-14" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Groups: </span><span class="sc">{</span>groups<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">"</span> \</span>
+<span id="cb76-15"><a href="#cb76-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-16"><a href="#cb76-16" aria-hidden="true" tabindex="-1"></a>    bot.reply_to(message, text, parse_mode<span class="op">=</span><span class="st">"HTML"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="signature_setting-1" class="level3">
+<h3 class="anchored" data-anchor-id="signature_setting-1">signature_setting</h3>
+<blockquote class="blockquote">
+<pre><code> signature_setting (message)</code></pre>
+</blockquote>
+<p>show all bot stats</p>
+</section>
+<section id="admin-commands" class="level3">
+<h3 class="anchored" data-anchor-id="admin-commands">Admin commands</h3>
+<p>These commands will only work for pre-approved users. The first user will be you!</p>
+<p>Get your <strong>user ID</strong> with https://t.me/getmyid_bot and save it as an environment variable <code>YOUR_USER_ID</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_bot_admin(user_id):</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"checks if a user is an admin or creator of the bot"</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>        added_admins <span class="op">=</span> <span class="bu">list</span>(database_to_dataframe(<span class="st">"admins"</span>)[<span class="st">"user id"</span>])</span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"admin dataframe/database empty"</span>)</span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a>        added_admins <span class="op">=</span> []</span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> os.environ[<span class="st">"YOUR_USER_ID"</span>] <span class="op">==</span> <span class="bu">str</span>(user_id):</span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"creator used an admin command"</span>)</span>
+<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> user_id <span class="kw">in</span> added_admins:</span>
+<span id="cb78-14"><a href="#cb78-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>user_id<span class="sc">}</span><span class="ss"> used an admin command"</span>)</span>
+<span id="cb78-15"><a href="#cb78-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb78-16"><a href="#cb78-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb78-17"><a href="#cb78-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"some rando used an admin command"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="is_bot_admin" class="level3">
+<h3 class="anchored" data-anchor-id="is_bot_admin">is_bot_admin</h3>
+<blockquote class="blockquote">
+<pre><code> is_bot_admin (user_id)</code></pre>
+</blockquote>
+<p>checks if a user is an admin or creator of the bot</p>
+<section id="admin-option" class="level4">
+<h4 class="anchored" data-anchor-id="admin-option">/admin {option}</h4>
+<p><br></p>
+<p>Available options: - send Reply to a message with <code>/admin send</code> to private message all bot update_users. - delete <strong>(to do/enhancement - this doesn’t work yet)</strong> Reply to the message that was sent to delete it in the private chat of all users. - add Add other admins; forward a message to your private chat with the bot from the user you want to add as admin, then reply tthe forwarded message with <code>/admin add</code>. - remove Remove an admin that was added; works the same as <code>add</code>. - count Shows number of admins. - help Shows avilable commands and what they’re for.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="at">@bot.message_handler</span>(commands<span class="op">=</span>[<span class="st">'admin'</span>], chat_types<span class="op">=</span>[<span class="st">'private'</span>])</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> admin(message):</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a><span class="co">    handles admin commands in private chat</span></span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a><span class="co">    avilable options:</span></span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a><span class="co">    * send - sends a message to all bot user in private chat</span></span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a><span class="co">    * add - add new admin</span></span>
+<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a><span class="co">    * remove - remove admin</span></span>
+<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a><span class="co">    * count - show current number of admins </span></span>
+<span id="cb80-11"><a href="#cb80-11" aria-hidden="true" tabindex="-1"></a><span class="co">    * help - show avilable commands and what they're for</span></span>
+<span id="cb80-12"><a href="#cb80-12" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb80-13"><a href="#cb80-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-14"><a href="#cb80-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> is_bot_admin(user_id<span class="op">=</span>message.from_user.<span class="bu">id</span>):</span>
+<span id="cb80-15"><a href="#cb80-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-16"><a href="#cb80-16" aria-hidden="true" tabindex="-1"></a>        admin <span class="op">=</span> message.text.replace(<span class="st">" "</span>, <span class="st">""</span>).split(<span class="st">'/admin'</span>)[<span class="dv">1</span>]</span>
+<span id="cb80-17"><a href="#cb80-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-18"><a href="#cb80-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> admin <span class="op">==</span> <span class="st">'help'</span>:</span>
+<span id="cb80-19"><a href="#cb80-19" aria-hidden="true" tabindex="-1"></a>            text<span class="op">=</span><span class="st">"&lt;b&gt;Link Ninja admin commands&lt;/b&gt; </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb80-20"><a href="#cb80-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Format: /admin </span><span class="sc">{command}</span><span class="st"> </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb80-21"><a href="#cb80-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"send - reply to a message with this to copy and send to all bot users in private chat </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb80-22"><a href="#cb80-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">"add - add new admin </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb80-23"><a href="#cb80-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">"remove - remove admin </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb80-24"><a href="#cb80-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">"count - show current number of admins </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb80-25"><a href="#cb80-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">"help - show avilable commands and what they're for"</span> \</span>
+<span id="cb80-26"><a href="#cb80-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-27"><a href="#cb80-27" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, text, parse_mode<span class="op">=</span><span class="st">"HTML"</span>)</span>
+<span id="cb80-28"><a href="#cb80-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-29"><a href="#cb80-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> admin <span class="op">==</span> <span class="st">'send'</span>:</span>
+<span id="cb80-30"><a href="#cb80-30" aria-hidden="true" tabindex="-1"></a>            forward_to <span class="op">=</span> database_to_dataframe(<span class="st">"current-users"</span>)</span>
+<span id="cb80-31"><a href="#cb80-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-32"><a href="#cb80-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> chat_id <span class="kw">in</span> forward_to[<span class="st">"private chat id"</span>]:</span>
+<span id="cb80-33"><a href="#cb80-33" aria-hidden="true" tabindex="-1"></a>                bot.copy_message(chat_id<span class="op">=</span>chat_id, from_chat_id<span class="op">=</span>message.chat.<span class="bu">id</span>, message_id<span class="op">=</span>message.reply_to_message.message_id)</span>
+<span id="cb80-34"><a href="#cb80-34" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb80-35"><a href="#cb80-35" aria-hidden="true" tabindex="-1"></a>            <span class="co"># update_settings(chat_id=message.chat.id, signature=True)</span></span>
+<span id="cb80-36"><a href="#cb80-36" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="ss">f"message sent to </span><span class="sc">{</span><span class="bu">len</span>(forward_to[<span class="st">'private chat id'</span>])<span class="sc">}</span><span class="ss"> users"</span>)</span>
+<span id="cb80-37"><a href="#cb80-37" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb80-38"><a href="#cb80-38" aria-hidden="true" tabindex="-1"></a>        <span class="co"># elif admin == 'delete':</span></span>
+<span id="cb80-39"><a href="#cb80-39" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     forward_to = database_to_dataframe("current-users")</span></span>
+<span id="cb80-40"><a href="#cb80-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-41"><a href="#cb80-41" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     for chat_id in forward_to["private chat id"]:</span></span>
+<span id="cb80-42"><a href="#cb80-42" aria-hidden="true" tabindex="-1"></a>        <span class="co">#         # note: this needs the message ID of every message sent which has to be saved to our database when `/admin send` is used</span></span>
+<span id="cb80-43"><a href="#cb80-43" aria-hidden="true" tabindex="-1"></a>        <span class="co">#         # it will need to iterate through message IDs</span></span>
+<span id="cb80-44"><a href="#cb80-44" aria-hidden="true" tabindex="-1"></a>        <span class="co">#         bot.delete_message(chat_id=chat_id, message_id=message.reply_to_message.message_id)</span></span>
+<span id="cb80-45"><a href="#cb80-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-46"><a href="#cb80-46" aria-hidden="true" tabindex="-1"></a>        <span class="co">#     bot.reply_to(message, f"message deleted from {len(forward_to['private chat id'])} chats")</span></span>
+<span id="cb80-47"><a href="#cb80-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-48"><a href="#cb80-48" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> admin <span class="op">==</span> <span class="st">'add'</span>:</span>
+<span id="cb80-49"><a href="#cb80-49" aria-hidden="true" tabindex="-1"></a>            update_admins(user_id<span class="op">=</span>message.reply_to_message.forward_from.<span class="bu">id</span>, action<span class="op">=</span><span class="st">"add"</span>)</span>
+<span id="cb80-50"><a href="#cb80-50" aria-hidden="true" tabindex="-1"></a>            admins <span class="op">=</span> admin_stats()</span>
+<span id="cb80-51"><a href="#cb80-51" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="ss">f"admin added; there are now </span><span class="sc">{</span>admins<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss"> admins"</span>)</span>
+<span id="cb80-52"><a href="#cb80-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-53"><a href="#cb80-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> admin <span class="op">==</span> <span class="st">'remove'</span>:</span>
+<span id="cb80-54"><a href="#cb80-54" aria-hidden="true" tabindex="-1"></a>            update_admins(user_id<span class="op">=</span>message.reply_to_message.forward_from.<span class="bu">id</span>, action<span class="op">=</span><span class="st">"remove"</span>)</span>
+<span id="cb80-55"><a href="#cb80-55" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>:</span>
+<span id="cb80-56"><a href="#cb80-56" aria-hidden="true" tabindex="-1"></a>                admins <span class="op">=</span> admin_stats()</span>
+<span id="cb80-57"><a href="#cb80-57" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span>: <span class="co"># if all admins have been removed and dataframe is empty</span></span>
+<span id="cb80-58"><a href="#cb80-58" aria-hidden="true" tabindex="-1"></a>                admins <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb80-59"><a href="#cb80-59" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="ss">f"admin removed; there are now </span><span class="sc">{</span>admins<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss"> admins"</span>)</span>
+<span id="cb80-60"><a href="#cb80-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-61"><a href="#cb80-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> admin <span class="op">==</span> <span class="st">'count'</span>:</span>
+<span id="cb80-62"><a href="#cb80-62" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>:</span>
+<span id="cb80-63"><a href="#cb80-63" aria-hidden="true" tabindex="-1"></a>                admins <span class="op">=</span> admin_stats()</span>
+<span id="cb80-64"><a href="#cb80-64" aria-hidden="true" tabindex="-1"></a>                bot.reply_to(message, <span class="ss">f"there are </span><span class="sc">{</span>admins<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss"> admins"</span>)</span>
+<span id="cb80-65"><a href="#cb80-65" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span>: <span class="co"># if admins doesn't exist yet because no additional admins have been added</span></span>
+<span id="cb80-66"><a href="#cb80-66" aria-hidden="true" tabindex="-1"></a>                bot.reply_to(message, <span class="st">"there's no additional admins"</span>)</span>
+<span id="cb80-67"><a href="#cb80-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-68"><a href="#cb80-68" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb80-69"><a href="#cb80-69" aria-hidden="true" tabindex="-1"></a>            bot.reply_to(message, <span class="st">"Available commands are: send, add, remove, count and help"</span>)</span>
+<span id="cb80-70"><a href="#cb80-70" aria-hidden="true" tabindex="-1"></a>            bot.send_message(message.chat.<span class="bu">id</span>, <span class="st">"Use `/admin help` to learn more"</span>, parse_mode<span class="op">=</span><span class="st">"MarkdownV2"</span>)</span>
+<span id="cb80-71"><a href="#cb80-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-72"><a href="#cb80-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb80-73"><a href="#cb80-73" aria-hidden="true" tabindex="-1"></a>        bot.reply_to(message, <span class="st">"Non admins get rekt. Send $1000 for forgiveness"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="admin" class="level3">
+<h3 class="anchored" data-anchor-id="admin">admin</h3>
+<blockquote class="blockquote">
+<pre><code> admin (message)</code></pre>
+</blockquote>
+<p>handles admin commands in private chat</p>
+<p>avilable options: * send - sends a message to all bot user in private chat * add - add new admin * remove - remove admin * count - show current number of admins * help - show avilable commands and what they’re for</p>
+</section>
+<section id="help" class="level3">
+<h3 class="anchored" data-anchor-id="help"><code>/help</code></h3>
+<p>Explans how the bot works and shows the available settings.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="at">@bot.message_handler</span>(commands<span class="op">=</span>[<span class="st">'help'</span>], chat_types<span class="op">=</span>[<span class="st">'private'</span>])</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> admin(message):</span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a><span class="co">    send help message in private chat</span></span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span><span class="st">"&lt;b&gt;Link Ninja info&lt;/b&gt; </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"&lt;b&gt;What does it do?&lt;/b&gt; </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"- Replaces twitter.com links with fxtwitter.com. </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb82-10"><a href="#cb82-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"- You can change it to nitter.net or your own nitter domain. </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb82-11"><a href="#cb82-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"&lt;b&gt;How do you use it?&lt;/b&gt; </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb82-12"><a href="#cb82-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"- Just send a link. Only messages containing just the link will be replaced. </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb82-13"><a href="#cb82-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"- @LinkNinjaBot needs to be added as an admin to work in groups. </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb82-14"><a href="#cb82-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"&lt;b&gt;Settings&lt;/b&gt; </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb82-15"><a href="#cb82-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Format: /setting </span><span class="sc">{options}</span><span class="st"> </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb82-16"><a href="#cb82-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"/signature {on/off} </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb82-17"><a href="#cb82-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"- &lt;code&gt;/signature on&lt;/code&gt; sends the message with the replaced link, the original link and who it was sent by. </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb82-18"><a href="#cb82-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"- By default it's off in private chats and on in group chats. </span><span class="ch">\n\n</span><span class="st">"</span> \</span>
+<span id="cb82-19"><a href="#cb82-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"/domain {your domain/reset} </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb82-20"><a href="#cb82-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"- Choose the domain to replace twitter.com with. </span><span class="ch">\n</span><span class="st">"</span> \</span>
+<span id="cb82-21"><a href="#cb82-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"- &lt;code&gt;/domain reset&lt;/code&gt; changes it back to fxtwitter.com."</span> \</span>
+<span id="cb82-22"><a href="#cb82-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-23"><a href="#cb82-23" aria-hidden="true" tabindex="-1"></a>    bot.reply_to(message, text, parse_mode<span class="op">=</span><span class="st">"HTML"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="admin-1" class="level3">
+<h3 class="anchored" data-anchor-id="admin-1">admin</h3>
+<blockquote class="blockquote">
+<pre><code> admin (message)</code></pre>
+</blockquote>
+<p>send help message in private chat</p>
+</section>
+</section>
+<section id="how-to-rundeploy" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-rundeploy">How to run/deploy?</h2>
+<p><em>Note: it’ll be easier to create a separate bot for testing and deploying; if you create a webhook for a bot, polling won’t work untill the webhook is deleted</em></p>
+<section id="webhooks" class="level3">
+<h3 class="anchored" data-anchor-id="webhooks">Webhooks</h3>
+<p>This is ideal for deployment since telegram can send updates to our server without us having to keep checking/polling for updates</p>
+<p>To create a webhook, we’ll have to create a domain and register that with telegram. To do that, open this URL:</p>
+<pre><code>https://api.telegram.org/bot&lt;bot_token&gt;/setWebhook?url=&lt;webhook_url&gt;</code></pre>
+<p><br></p>
+<p>or optionally with a secret token (like a password):</p>
+<pre><code>https://api.telegram.org/bot&lt;bot_token&gt;/setWebhook?url=&lt;webhook_url&gt;&amp;secret_token=&lt;secret_token&gt;</code></pre>
+<p><br></p>
+<p>You can see the status of your webhook with:</p>
+<pre><code>https://api.telegram.org/bot&lt;bot_token&gt;/getWebhookInfo</code></pre>
+<p><br></p>
+<p>And delete your webhooks with:</p>
+<pre><code>https://api.telegram.org/bot&lt;bot_token&gt;/deleteWebhook</code></pre>
+<p><br></p>
+<p>For more info on webhooks:</p>
+<ul>
+<li><p>https://core.telegram.org/bots/api#setwebhook</p></li>
+<li><p>https://xabaras.medium.com/setting-your-telegram-bot-webhook-the-easy-way-c7577b2d6f72</p></li>
+</ul>
+<p><strong>We’ll be deploying with Deta becase it’s both free and convenient 😃</strong></p>
+<p><em>Note that they require the file to be named <code>main.py</code></em></p>
+<p>To make things easier, we’ll use the webhook functions from our bot library</p>
+<p>Create a domain on Deta.sh and save that as an environment variable called <code>DOMAIN</code>. Follow this guide for a detailed walk through:</p>
+<p>https://medium.com/<span class="citation" data-cites="noufal.slm/create-your-own-telegram-bot-with-python-and-deta-sh-ef9aee7b93d5">@noufal.slm/create-your-own-telegram-bot-with-python-and-deta-sh-ef9aee7b93d5</span></p>
+<p>An optional environment variable you can set is <code>WEBHOOK_PASSWORD</code>, which is an added bit of security.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if a webhook already exists</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> bot.get_webhook_info().url <span class="op">!=</span> <span class="ss">f'</span><span class="sc">{</span>os<span class="sc">.</span>environ[<span class="st">"DOMAIN"</span>]<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>os<span class="sc">.</span>environ[<span class="st">"BOT_TOKEN"</span>]<span class="sc">}</span><span class="ss">'</span>:</span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>    nest_asyncio.<span class="bu">apply</span>()</span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># https://pytba.readthedocs.io/en/latest/sync_version/index.html#telebot.TeleBot.set_webhook</span></span>
+<span id="cb88-7"><a href="#cb88-7" aria-hidden="true" tabindex="-1"></a>    bot.run_webhooks(</span>
+<span id="cb88-8"><a href="#cb88-8" aria-hidden="true" tabindex="-1"></a>        webhook_url<span class="op">=</span><span class="ss">f'</span><span class="sc">{</span>os<span class="sc">.</span>environ[<span class="st">"DOMAIN"</span>]<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>os<span class="sc">.</span>environ[<span class="st">"BOT_TOKEN"</span>]<span class="sc">}</span><span class="ss">'</span>, <span class="co"># https://yourdomain.tld/bot_token</span></span>
+<span id="cb88-9"><a href="#cb88-9" aria-hidden="true" tabindex="-1"></a>        secret_token<span class="op">=</span>os.environ[<span class="st">"WEBHOOK_PASSWORD"</span>], <span class="co"># remove if you don't want to set one</span></span>
+<span id="cb88-10"><a href="#cb88-10" aria-hidden="true" tabindex="-1"></a>        drop_pending_updates<span class="op">=</span><span class="va">True</span></span>
+<span id="cb88-11"><a href="#cb88-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="polling" class="level3">
+<h3 class="anchored" data-anchor-id="polling">Polling</h3>
+<p>Use this for testing; much easier since it doesn’t require any set up!</p>
+<p>If you’ve already created a webhook for a bot that you now want to use polling for, re-enable polling with:</p>
+<pre><code>https://api.telegram.org/bot&lt;bot_token&gt;/getUpdates</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bot.infinity_polling(</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     allowed_updates=telebot.util.update_types,</span></span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     skip_pending=True)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
