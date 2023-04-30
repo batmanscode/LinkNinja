@@ -1,5 +1,8 @@
 name: Push to Space
-on: push
+# on: push
+on:
+  push:
+    branches: ["use-fastapi"]
 
 jobs:
   push-to-space:
